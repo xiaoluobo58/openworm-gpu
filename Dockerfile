@@ -28,10 +28,6 @@ LABEL maintainer="David Lung (lungdm@gmail.com); Padraig Gleeson (p.gleeson@gmai
 ARG USR=ow
 ENV USER=$USR
 
-RUN apt-get update && \
-  apt-get upgrade -y && \
-  apt-get dist-upgrade -y
-
 RUN mkdir -p /etc/sudoers.d && \
   export uid=1000 gid=1000 && \
   mkdir -p /home/$USER && \
@@ -47,19 +43,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 ################################################################################
 ########     Update/install essential libraries
 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends apt-utils \
-  wget nano htop build-essential make git automake autoconf \
-  g++ rpm libtool libncurses5-dev zlib1g-dev bison flex \
-  sudo xorg openbox x11-xserver-utils \
-  libxext-dev libncurses-dev mercurial \
-  freeglut3-dev libglu1-mesa-dev libglew-dev python3-dev python3-pip \
-  maven openjdk-8-jdk \
-  libnuma1 \
-  openmpi-bin  libopenmpi-dev \
-  libgl1 libglx-mesa0  libgl1-mesa-dri libfreetype6-dev \
-  libxft-dev unzip ffmpeg xvfb tmux \
-  ca-certificates clinfo ocl-icd-opencl-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    -o Dpkg::Options::=--force-unsafe-io \
+    build-essential ca-certificates clinfo ffmpeg freeglut3-dev git \
+    libgl1-mesa-dri libglew-dev libglu1-mesa-dev libglx-mesa0 libncurses-dev \
+    libnuma1 nano ocl-icd-opencl-dev openjdk-8-jre-headless \
+    python3-dev python3-pip sudo wget xfonts-base xvfb \
+    && rm -rf /var/lib/apt/lists/*
 
 #RUN  sudo pip install --upgrade pip
 
@@ -165,6 +155,7 @@ FROM openworm-base AS cpu
 
 RUN apt-get update && apt-get install -y --no-install-recommends pocl-opencl-icd \
     && rm -rf /var/lib/apt/lists/*
-ENV PYTHONUNBUFFERED=1
+ENV POCL_CACHE_DIR=/var/cache/openworm-pocl/cpu \
+    PYTHONUNBUFFERED=1
 CMD ["python3", "master_openworm.py"]
 

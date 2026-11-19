@@ -59,6 +59,7 @@ if /i "%MODE%"=="check-gpu" goto check_gpu
 if /i "%TARGET%"=="gpu" goto gpu
 docker run --rm --init --env OW_OUT_DIR --env DURATION --env OW_DEVICE=CPU ^
   --mount "type=bind,source=%HOST_OUT_DIR%,target=%OW_OUT_DIR%" ^
+  --mount "type=volume,source=openworm-pocl-cpu,target=/var/cache/openworm-pocl" ^
   "%IMAGE%"
 goto finish
 
