@@ -56,6 +56,48 @@ We have put together a [Docker container](https://hub.docker.com/r/openworm/open
 
 ## Advanced
 
+### NVIDIA GPU on Windows
+
+Use Docker Desktop in **Linux containers** mode with its **WSL 2 backend** and a
+Windows NVIDIA driver that supports CUDA on WSL. The image includes the Linux
+compute dependencies. See the [Docker GPU setup guide](https://docs.docker.com/desktop/features/gpu/).
+
+From PowerShell in this checkout:
+
+```powershell
+.\run.cmd -gpu -d 15
+```
+
+The first run builds the local GPU image. Sibernetic's physics kernels run on
+the NVIDIA GPU through PoCL's CUDA backend. The c302/NEURON model and video
+rendering run on the CPU. Look for `CL_DEVICE_NAME` and `CL_DEVICE_TYPE` in the
+solver output. GPU initialization failures exit with an error.
+
+The GPU command streams logs and removes its container on exit. Reports,
+trajectories, figures and movies are saved in `output\`. A Docker volume caches
+compiled PoCL kernels across runs.
+
+```powershell
+.\run.cmd -check-gpu           # Build the image if needed and check CUDA and OpenCL
+.\run.cmd -cpu -d 15           # Run the same local stack with a CPU OpenCL device
+docker build --target gpu -t "openworm-gpu:$(Get-Content VERSION)" .
+```
+
+Build explicitly after changing the Dockerfile or simulator code. The plain
+`run.cmd` command still uses the upstream CPU image tag and `stop.cmd` workflow.
+
+With Python 3 on the host, run the 15 ms CPU/GPU acceptance check or the full
+benchmark:
+
+```powershell
+python .\docker\verify_gpu.py --smoke-only
+python .\docker\verify_gpu.py
+```
+
+The benchmark measures cold and warm GPU runs and reports median solver and
+wall-clock times for three 100 ms runs per device. Pass `--device-name` with
+your GPU's model name when testing a card other than an RTX 2080.
+
 ### Arguments
 
 - `-d [num]`: Use to modify the duration of the simulation in milliseconds. Default is 15. Use 5000 to run for time to make the full movie above (i.e. 5 seconds).
