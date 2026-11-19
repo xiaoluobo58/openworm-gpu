@@ -2,6 +2,13 @@
 
 [![Docker Image CI](https://github.com/openworm/OpenWorm/actions/workflows/docker-image.yml/badge.svg)](https://github.com/openworm/OpenWorm/actions/workflows/docker-image.yml) [![Docker Image Test - quick](https://github.com/openworm/OpenWorm/actions/workflows/docker-image-quickrun.yml/badge.svg)](https://github.com/openworm/OpenWorm/actions/workflows/docker-image-quickrun.yml) [![Docker Image Test Build - Intel drivers](https://github.com/openworm/OpenWorm/actions/workflows/docker-image-intel.yml/badge.svg)](https://github.com/openworm/OpenWorm/actions/workflows/docker-image-intel.yml)
 
+## Differences Between OpenWorm GPU and the Original Project([OpenWorm](https://github.com/openworm/OpenWorm))
+This fork adds NVIDIA GPU acceleration to Sibernetic's physics simulation using PoCL's CUDA backend.  
+
+The c302/NEURON model and video rendering remain CPU-based.  
+
+For setup instructions and usage details, see [NVIDIA GPU on Windows](#nvidia-gpu-on-windows).  
+
 ## About **OpenWorm**
 
 [OpenWorm](http://openworm.org) aims to build the first comprehensive computational model of *Caenorhabditis elegans* (*C. elegans*), a microscopic roundworm. With only a thousand cells, it solves basic problems such as feeding, mate-finding and predator avoidance. Despite being extremely well-studied in biology, a deep, principled understanding of the biology of this organism remains elusive.
@@ -45,7 +52,7 @@ We have put together a [Docker container](https://hub.docker.com/r/openworm/open
 1. Ensure the Docker daemon is running in the background (on MacOS/Windows there should be an icon with the Docker whale logo showing in the menu bar/system tray). 
 2. Open a terminal and run:
    ```bash
-   git clone http://github.com/openworm/openworm
+   git clone http://github.com/xiaoluobo58/openworm-gpu
    cd openworm
    ```
 3. Optional: Run `./build.sh` (`build.cmd` on Windows or `.\build.cmd` on [PowerShell](https://learn.microsoft.com/en-us/powershell/dsc/overview?view=dsc-2.0)). If you skip this step, it will download the latest released Docker image from the [OpenWorm Docker hub](https://hub.docker.com/r/openworm/openworm).
