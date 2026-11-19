@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 FROM nvidia/cuda:12.9.1-base-ubuntu24.04@sha256:29e5e3425e2e0f5a4e97c9fb4695ba4887cd78210a43cf94c3bcafc6ab01c5e6 AS pocl-cuda-build
 
 ARG POCL_COMMIT=a6f7e5cc223cdf6254ff62ea1f37a9aa8a52d778
@@ -133,7 +131,7 @@ FROM openworm-base AS gpu
 RUN apt-get update && apt-get install -y --no-install-recommends \
     clang-18 libhwloc15 && rm -rf /var/lib/apt/lists/*
 COPY --from=pocl-cuda-build /opt/pocl-cuda/ /opt/pocl-cuda/
-COPY --from=pocl-cuda-build /usr/local/cuda-12.9/targets/x86_64-linux/lib/libcudart.so.12* /opt/pocl-cuda/lib/
+COPY --from=pocl-cuda-build /usr/local/cuda-12.9/targets/x86_64-linux/lib/libcudart.so.12.* /opt/pocl-cuda/lib/
 COPY --from=pocl-cuda-build /usr/local/cuda-12.9/nvvm/libdevice/ /usr/local/cuda/nvvm/libdevice/
 RUN printf '%s\n' /opt/pocl-cuda/lib > /etc/ld.so.conf.d/openworm-pocl-cuda.conf && ldconfig
 
