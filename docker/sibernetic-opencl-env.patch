@@ -1,7 +1,7 @@
 diff --git a/sibernetic_c302.py b/sibernetic_c302.py
 --- a/sibernetic_c302.py
 +++ b/sibernetic_c302.py
-@@ -440,6 +440,17 @@ def main(a=None):
+@@ -440,6 +440,18 @@ def main(a=None):
          % (os.environ.get("PYTHONPATH", "."), os.path.abspath(sim_dir)),
          "NEURON_MODULE_OPTIONS": "-nogui",
      }
@@ -9,6 +9,7 @@ diff --git a/sibernetic_c302.py b/sibernetic_c302.py
 +    for key in (
 +        "LD_LIBRARY_PATH",
 +        "OCL_ICD_VENDORS",
++        "PATH",
 +        "POCL_CACHE_DIR",
 +        "POCL_CUDA_TOOLKIT_PATH",
 +        "POCL_DEVICES",
