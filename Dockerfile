@@ -62,18 +62,13 @@ WORKDIR $HOME
 
 
 ################################################################################
-########     Install NEURON simulator
-
-RUN sudo pip install neuron==8.2.6  --break-system-packages
-
-
-################################################################################
-########     Install c302 for building neuronal network models
-
-RUN git clone https://github.com/openworm/c302.git && \
+########     Install NEURON and c302 together so pip resolves NumPy once
+RUN git init c302 && \
+  git -C c302 fetch --depth 1 https://github.com/openworm/c302.git 3869879308204fa83a7fda608fcc445f23920000 && \
+  git -C c302 checkout --detach FETCH_HEAD && \
   cd c302 && \
-  git checkout --detach 3869879308204fa83a7fda608fcc445f23920000 && \
-  sudo pip install .  --break-system-packages
+  sudo pip install --break-system-packages neuron==8.2.6 . && \
+  sudo pip check
 
 # Note: pyNeuroML installed with the above library
 
@@ -83,9 +78,10 @@ RUN git clone https://github.com/openworm/c302.git && \
 ########     Install Sibernetic for the worm body model
 
 COPY docker/sibernetic-opencl-env.patch /tmp/sibernetic-opencl-env.patch
-RUN git clone https://github.com/openworm/sibernetic.git && \
+RUN git init sibernetic && \
+  git -C sibernetic fetch --depth 1 https://github.com/openworm/sibernetic.git 5ee2b2262b8d59eaca00d451399a08ae0513afad && \
+  git -C sibernetic checkout --detach FETCH_HEAD && \
   cd sibernetic && \
-  git checkout --detach 5ee2b2262b8d59eaca00d451399a08ae0513afad && \
   git apply /tmp/sibernetic-opencl-env.patch
 
 
